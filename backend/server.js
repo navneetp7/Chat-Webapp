@@ -7,11 +7,12 @@ const userRoutes = require("./routes/userRoutes.js");
 const app=express();
 dotenv.config();
 connectdb(); 
+app.use(express.json()) ; //To take in the json data
 app.get('/',(req,res)=>{
     res.send("API is running successfully");
 
     
-})
+}) 
 app.use('/api/user',userRoutes);
 const PORT = process.env.PORT || 3030;
 
