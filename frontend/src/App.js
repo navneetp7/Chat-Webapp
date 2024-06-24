@@ -1,26 +1,29 @@
 import "./App.css";
-
+import React from "react";
 import Chatpage from "./Pages/Chatpage";
 import Homepage from "./Pages/Homepage";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import EmailPage from "../components/Authentication/EmailPage";
-import OTPPage from "../components/Authentication/OTPPage";
-import NamePage from "../components/Authentication/NamePage";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import EmailPage from "./components/Authentication/EmailPage";
+import OTPPage from "./components/Authentication/OTPPage";
+import NamePage from "./components/Authentication/NamePage";
+import Signup from "./components/Authentication/Signup";
 
 
 
 
 function App() {
   return (
-    <div className="App">
-      <Route path="/" component={Homepage} exact />
-      <Route path="/chats" component={Chatpage} />
+    <Router>
+      <div className="App">
+        <Route path="/" component={Homepage} exact />
+        <Route path="/chats" component={Chatpage} />
 
-      <Route path="/" element={<EmailPage />} />
-      <Route path="/otp" element={<OTPPage />} />
-      <Route path="/name" element={<NamePage />} />
-    </div>
+        <Route path="/e" exact component={EmailPage} />
+        <Route path="/otp" component={OTPPage} />
+        <Route path="/signup" component={Signup} />
+      </div>
+    </Router>
   );
 }
 

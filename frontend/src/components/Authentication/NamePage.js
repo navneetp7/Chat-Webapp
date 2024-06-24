@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import "../../App.css";
 
 const NamePage = () => {
   const [name, setName] = useState("");
@@ -18,11 +19,12 @@ const NamePage = () => {
   };
 
   return (
-    <div>
-      <h1>Enter Your Name</h1>
+    <div className="container">
+      <h1>
+        <b>Enter Your Name</b>
+      </h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Name:
           <input
             type="text"
             value={name}
@@ -30,7 +32,9 @@ const NamePage = () => {
             required
           />
         </label>
-        <button type="submit">Submit</button>
+        <button className="blue-button" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );

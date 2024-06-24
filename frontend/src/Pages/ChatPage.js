@@ -23,3 +23,5 @@ const Chatpage = () => {
 };
 
 export default Chatpage;
+
+

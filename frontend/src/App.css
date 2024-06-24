@@ -7,3 +7,84 @@
   background-size: cover;
   background-position: center;
 }
+
+.container {
+  width: 300px; /* Fixed width */
+  height: 400px; /* Fixed height */
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: rgb(199, 191, 191);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  
+   display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+/* App.css */
+.container1 {
+  width: 400px;
+  height:300px;
+  margin: 50px auto;
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: rgb(199, 191, 191);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  align-items: center;
+
+ 
+}
+
+.otp-input {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  margin: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.blue-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.blue-button:hover {
+  background-color: #0056b3;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+.container2{
+  width: 300px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: rgb(199, 191, 191);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  
+   display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   
+}
