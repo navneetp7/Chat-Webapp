@@ -18,22 +18,20 @@ const registerUser1 = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User already exists");
   }
-  req.userData.webmail=webmail;
-  res.status(200).json({message:"Webmail accepted"});
+  res.status(200).json({message:"Webmail accepted",webmail});
   next();
 });
 
 const registerUser2 = asyncHandler(async (req, res) => {
-  const { otp } = req.body;
-  const { OTP } = req.body;
-
+  const { otp ,webmail} = req.body;
+  res.status(200).json({message:"OTP yet to be done",webmail});
   if (!otp) {
     res.status(400);
     throw new Error("Please enter otp");
   }
   if (otp == OTP) {
     req.userData.otp=otp;
-    res.status(200).json({message:"OTP verified"});
+    res.status(200).json({message:"OTP verified",webmail});
   }else{
     res.status(400).json({message:"Invalid OTP"});
   }
@@ -41,7 +39,7 @@ const registerUser2 = asyncHandler(async (req, res) => {
 });
 
 const registerUser3 = asyncHandler(async (req,res) =>{
-  let { name, password, profilepicture}= req.body;
+  let { name , webmail , password, profilepicture }= req.body;
   name=name.trim();
   pasword=password.trim();
   if (!name || !password) {
@@ -54,21 +52,39 @@ const registerUser3 = asyncHandler(async (req,res) =>{
         res.status(400);
         throw new Error("Password is too short.Enter a password longer than 8 characters");
   }
-  req.userData.name = name;
-  req.userData.password = password;
-  req.userData.profilepicture = profilepicture;
-  const user = await User.create(req.userData);
-  if (user) {
-    res.status(201).json({
-      _id:user._id,
-      name:user.name,
-      webmail:user.webmail,
-      profilepicture:user.profilepicture,
-      token:generateToken(user._id),
-    })
-  } else{
+  
+  const user = await User.create({
+    name,
+    webmail,
+    password,
+    profilepicture,
+  });
+   if (user) {
+      res.status(201).json({
+          _id:user._id,
+          name:user.name,
+          webmail:user.webmail,
+          password:user.password,
+          profilepicture:user.profilepicture,
+          token:generateToken(user._id),
+        })
+    } else{
     res.status(400);
     throw new Error("Failed to Create the User");
   }
 });
-module.exports = {registerUser1,registerUser2,registerUser3};
+
+const authUser = asyncHandler(async(req,res)=>{
+    const {webmail,password}=req.body;
+    const  user = await User.findOne({webmail});
+    if (user && (await user.matchPassword(password )))
+      res.json({
+        _id:user._id,
+        name:user.name,
+        webmail:user.webamil,
+        profilepicture:user.profilepicture,
+        token: generateToken(user._id),
+      })
+});
+
+module.exports = {registerUser1,registerUser2,registerUser3,authUser};
