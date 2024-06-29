@@ -22,7 +22,7 @@ const Signup = () => {
 
   const submitHandler = async () => {
     setPicLoading(true);
-    if (!name || !password || !confirmpassword) {
+    if (!name || !password || !confirmpassword) { //why remove webmail. 
       toast({
         title: "Please Fill all the Feilds",
         status: "warning",
@@ -50,8 +50,10 @@ const Signup = () => {
           "Content-type": "application/json",
         },
       };
-      const { data } = await axios.post(
-        "/api/user",
+      const { data } = await axios.post( //Changes to split the data ;
+        "/api/user", // /api/user/registerUser1 for webmail.
+                     // /api/user/registerUser2 for OTP.
+                     // /api/user/registerUser3 for name,password,profilepicture
         {
           name,
           email,
@@ -100,9 +102,9 @@ const Signup = () => {
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "chat-app");
-      data.append("cloud_name", "dm1mcccyi");
-      fetch("https://api.cloudinary.com/v1_1/dm1mcccyi/image/upload", {
+      data.append("upload_preset", "mean-chatapp");
+      data.append("cloud_name", "navneetp");
+      fetch("https://api.cloudinary.com/v1_1/navneetp/image/upload",   {
         method: "post",
         body: data,
       })

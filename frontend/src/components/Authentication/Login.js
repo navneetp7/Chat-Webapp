@@ -17,6 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
+//const handleClick = () => setShow(!show);
   const { setUser } = ChatState();
 
   const submitHandler = async () => {
