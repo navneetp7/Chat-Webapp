@@ -1,14 +1,13 @@
 const mongoose =require("mongoose");
-const chatmodel=mongoose .Schema(
+const chatModel=mongoose .Schema(
     {
-        chatname:{type:String,trim:true},
-        isGroupchat:{type:Boolean,default:false},
-        user:
-            { // i have removed [ before the { 
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"User",
-            }, // ] after } has been removed.
-        latestchat: 
+        chatName:{type:String,trim:true},
+        isGroupChat:{type:Boolean,default:false},
+        users:[{ 
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
+        },], 
+        latestMessage: 
             {
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Message",
@@ -26,6 +25,5 @@ const chatmodel=mongoose .Schema(
 
 );
 
-const Chat=mongoose.model("Chat",chatmodel);
-
+const Chat=mongoose.model("Chat",chatModel);
 module.exports= Chat;
