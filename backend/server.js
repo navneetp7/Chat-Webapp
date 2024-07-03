@@ -28,4 +28,16 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3030;
 
-app.listen(3030,console.log(`Server running on port ${PORT}`.blue.bold)); 
+const server = app.listen(3030,console.log(`Server running on port ${PORT}`.blue.bold)); 
+
+const io = require('socket.io')(server,{
+    pingTimeout: 60000,
+    cors: {
+        origin: "http://localhost:3030",
+
+    }
+});
+
+io.on("connection",(socket)=>{
+     console.log("connected to socket.io");
+});
