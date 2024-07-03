@@ -26,9 +26,9 @@ app.use('/api/message',messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT || 3000;
 
-const server = app.listen(3030,console.log(`Server running on port ${PORT}`.blue.bold)); 
+const server = app.listen(3000,console.log(`Server running on port ${PORT}`.blue.bold)); 
 
 const io = require('socket.io')(server,{
     pingTimeout: 60000,
