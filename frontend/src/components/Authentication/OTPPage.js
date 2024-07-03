@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import axios from "axios";
 import "../../App.css";
 
 const OTPPage = () => {
@@ -14,11 +15,28 @@ const OTPPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const otp = otpInputRefs.map((ref) => ref.current.value).join("");
     if (otp.length === 4) {
-      history.push("/signup", { ...location.state, otp });
+      try {
+        // Replace with your backend API endpoint
+        const response = await axios.post(
+          "http://127.0.0.1:5000/api/user/registerUser2",
+          {
+            otp,
+            ...location.state,
+          }
+        );
+        if (response.data.success) {
+          history.push("/signup", { ...location.state, otp });
+        } else {
+          alert("Invalid OTP. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error verifying OTP:", error);
+        alert("An error occurred while verifying the OTP. Please try again.");
+      }
     } else {
       alert("Please enter the 4-digit OTP.");
     }

@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 function EmailInput() {
   const [email, setEmail] = useState("");
   const history = useHistory();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Replace "/next-page" with the actual path you want to navigate to
-    history.push("/otp");
+    try {
+      // Replace with your backend API endpoint
+      const response = await axios.post("http://127.0.0.1:5000/api/send-otp", { email });
+      if (response.data.success) {
+        // Navigate to the OTP page if the email is successfully submitted
+        history.push("/otp");
+      } else {
+        alert("Failed to send OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("An error occurred while sending the OTP. Please try again.");
+    }
   };
 
   return (
