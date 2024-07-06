@@ -3,7 +3,8 @@ const User = require("../models/userModels");
 const generateToken =require("../config/generateToken");
 const generateOTP=require("../utils/otp-generator");
 const sendEmail= require("../utils/nodemailer");
-const OTPStore = new Map(); // In-memory storage for OTPs
+const redisClient = require ("../config/redisClient");
+//const OTPStore = new Map(); // In-memory storage for OTPs
 
 const registerUser1 = asyncHandler(async (req, res ) => {
   const { webmail } = req.body;
@@ -12,19 +13,20 @@ const registerUser1 = asyncHandler(async (req, res ) => {
     res.status(400);
     throw new Error("Please enter a webmail");
   } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(webmail)) {
-      res.status(400);
-      throw new Error("Please enter valid webmail");
+    res.status(400);
+    throw new Error("Please enter valid webmail");
   }
   const userExists = await User.findOne({ webmail });
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
   }
-  const otp= generateOTP();
-  OTPStore.set(webmail, otp);
-  await sendEmail(webmail,"OTP VERIFICATION",`Your OTP is ${otp}`);
-  req.userData={webmail};
-  res.status(200).json({message:"Webmail accepted,OTP sent"});
+  const otp = generateOTP();
+  await redisClient.setEx(webmail, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
+  //OTPStore.set(webmail, otp);
+  await sendEmail(webmail, "OTP VERIFICATION", `Your OTP is ${otp}`);
+  req.userData = { webmail };
+  res.status(200).json({ message: "Webmail accepted,OTP sent" });
   //next();
 });
 
@@ -36,12 +38,14 @@ const registerUser2 = asyncHandler(async (req, res ) => {
     res.status(400);
     throw new Error("Please enter otp");
   }
-  const storedOTP = OTPStore.get(webmail);
+  //const storedOTP = OTPStore.get(webmail);
+  const storedOTP = await redisClient.get(webmail); // Retrieve OTP from Redis
   if (storedOTP && storedOTP == otp) {
-    OTPStore.delete(webmail);
-    req.userData={webmail};
-    res.status(200).json({message:"OTP verified",webmail});
-  }else{
+    //OTPStore.delete(webmail);
+    await redisClient.del(webmail); 
+    req.userData = { webmail };
+    res.status(200).json({ message: "OTP verified", webmail });
+  } else {
     res.status(400);
     throw new Error("Invalid OTP");
   }
