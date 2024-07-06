@@ -27,12 +27,13 @@ const response = (req, status, res = '') => {
         return !!data && data.constructor === Object
     }
 
-    const res ={
+    const response = {
         status: status,
         description: desc,
         res :isObject(res)? [res]:res
     }
 
-    res.status(status).json(res);
+    req.status(status).json(response);
 
 };
+module.exports = response; 

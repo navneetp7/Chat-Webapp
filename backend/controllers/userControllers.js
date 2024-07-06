@@ -1,7 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModels");
 const generateToken =require("../config/generateToken");
-const registerUser1 = asyncHandler(async (req, res, next) => {
+const generateOTP=require("../utils/otp-generator");
+const sendEmail= require("../utils/nodemailer");
+const OTPStore = new Map(); // In-memory storage for OTPs
+
+const registerUser1 = asyncHandler(async (req, res ) => {
   const { webmail } = req.body;
 
   if (!webmail) {
@@ -16,28 +20,37 @@ const registerUser1 = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("User already exists");
   }
-  res.status(200).json({message:"Webmail accepted",webmail});
-  next();
+  const otp= generateOTP();
+  OTPStore.set(webmail, otp);
+  await sendEmail(webmail,"OTP VERIFICATION",`Your OTP is ${otp}`);
+  req.userData={webmail};
+  res.status(200).json({message:"Webmail accepted,OTP sent"});
+  //next();
 });
 
-const registerUser2 = asyncHandler(async (req, res, next) => {
-  const { otp ,webmail} = req.body;
-  res.status(200).json({message:"OTP yet to be done",webmail});
+const registerUser2 = asyncHandler(async (req, res ) => {
+  const { otp } = req.body;
+  const webmail = req.userData ? req.userData.webmail : req.body.webmail;
+  // res.status(200).json({message:"OTP yet to be done",webmail});
   if (!otp) {
     res.status(400);
     throw new Error("Please enter otp");
   }
-  if (otp == OTP) {
-    req.userData.otp=otp;
+  const storedOTP = OTPStore.get(webmail);
+  if (storedOTP && storedOTP == otp) {
+    OTPStore.delete(webmail);
+    req.userData={webmail};
     res.status(200).json({message:"OTP verified",webmail});
   }else{
-    res.status(400).json({message:"Invalid OTP"});
+    res.status(400);
+    throw new Error("Invalid OTP");
   }
-  next();
+  //next();
 });
 
 const registerUser3 = asyncHandler(async (req,res) =>{
-  let { name , webmail , password, profilepicture }= req.body;
+  let { name , password, profilepicture }= req.body;
+  const webmail = req.userData ? req.userData.webmail : req.body.webmail;
   name=name.trim();
   password=password.trim();
   if (!name || !password) {
@@ -84,15 +97,12 @@ const authUser = asyncHandler(async(req,res)=>{
         profilepicture:user.profilepicture,
         token: generateToken(user._id),
       });
-    }
-    else 
-    {
+    } else {
       res.status(401);
       throw new Error("Invalid email or password");
     }
     
 });
-//api/user?search=navneet
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {

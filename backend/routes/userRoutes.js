@@ -6,5 +6,5 @@ userRouter.route('/register/step1').post(registerUser1);
 userRouter.route("/register/step2").post(registerUser2);
 userRouter.route("/register/step3").post(registerUser3).get(protect,allUsers);
 userRouter.route('/login').post(authUser);
-//userRouter.route("/").get(protect,allUsers);
+userRouter.route("/").get(protect,allUsers);
 module.exports = userRouter;
