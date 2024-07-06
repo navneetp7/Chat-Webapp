@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import Chatpage from "./Pages/Chatpage";
-import Homepage from "./Pages/Homepage";
+import Homepage from "./Pages/homepage";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EmailPage from "./components/Authentication/EmailPage";
