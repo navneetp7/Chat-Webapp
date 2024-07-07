@@ -25,20 +25,25 @@ app.use("/api/message", messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 8000;
 const server = app.listen(
-  5000,
+  PORT,
   console.log(`Server running on port ${PORT}`.blue.bold)
 );
 
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3030",
+    origin: "http://localhost:8000",
   },
 });
 
 io.on("connection", (socket) => {
   console.log("connected to socket.io");
+  socket.on('setup',(userData)=>{
+    socket.join(userData._id);
+    console.log('2');
+    console.log(userData._id);
+    socket.emit("connected"); 
+  })
 });

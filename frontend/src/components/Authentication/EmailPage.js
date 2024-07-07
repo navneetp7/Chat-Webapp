@@ -10,7 +10,7 @@ function EmailInput() {
     event.preventDefault();
     try {
       // Replace with your backend API endpoint
-      const response = await axios.post("http://127.0.0.1:3030/api/register/step1", { email });
+      const response = await axios.post("/api/user/register/step1", { email });
       if (response.data.success) {
         // Navigate to the OTP page if the email is successfully submitted
         history.push("/register/step2");

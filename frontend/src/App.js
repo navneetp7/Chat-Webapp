@@ -16,9 +16,9 @@ function App() {
         <Route path="/" component={Homepage} exact />
         <Route path="/chat" component={Chatpage} />
 
-        <Route path="/register/step1" exact component={EmailPage} />
-        <Route path="/register/step2" component={OTPPage} />
-        <Route path="/register/step3" component={Signup} />
+        <Route path="/api/user/register/step1" exact component={EmailPage} />
+        <Route path="/api/user/register/step2" component={OTPPage} />
+        <Route path="/api/user/register/step3" component={Signup} />
 
       </div>
     </Router>
