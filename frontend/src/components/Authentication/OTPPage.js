@@ -22,7 +22,7 @@ const OTPPage = () => {
       try {
         // Replace with your backend API endpoint
         const response = await axios.post(
-          "http://127.0.0.1:5000/api/user/registerUser2",
+          "/api/user/registerUser2",
           {
             otp,
             ...location.state,
