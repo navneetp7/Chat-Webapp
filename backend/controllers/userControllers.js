@@ -7,44 +7,44 @@ const sendEmail= require("../utils/nodemailer");
 const OTPStore = new Map(); // In-memory storage for OTPs
 
 const registerUser1 = asyncHandler(async (req, res ) => {
-  const { webmail } = req.body;
+  const { email } = req.body;
 
-  if (!webmail) {
+  if (!email) {
     res.status(400);
-    throw new Error("Please enter a webmail");
-  } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(webmail)) {
+    throw new Error("Please enter a email");
+  } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
     res.status(400);
     throw new Error("Please enter valid webmail");
   }
-  const userExists = await User.findOne({ webmail });
+  const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
   }
   const otp = generateOTP();
   //await redisClient.setEx(webmail, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
-  OTPStore.set(webmail, otp);
-  await sendEmail(webmail, "OTP VERIFICATION", `Your OTP is ${otp}`);
-  req.userData = { webmail };
+  OTPStore.set(email, otp);
+  await sendEmail(email, "OTP VERIFICATION", `Your OTP is ${otp}`);
+  req.userData = { email };
   res.status(200).json({ message: "Webmail accepted,OTP sent" });
   //next();
 });
 
 const registerUser2 = asyncHandler(async (req, res ) => {
   const { otp } = req.body;
-  const webmail = req.userData ? req.userData.webmail : req.body.webmail;
+  const email = req.userData ? req.userData.email : req.body.email;
   // res.status(200).json({message:"OTP yet to be done",webmail});
   if (!otp) {
     res.status(400);
     throw new Error("Please enter otp");
   }
-  const storedOTP = OTPStore.get(webmail);
+  const storedOTP = OTPStore.get(email);
   //const storedOTP = await redisClient.get(webmail); // Retrieve OTP from Redis
   if (storedOTP && storedOTP == otp) {
-  OTPStore.delete(webmail);
+  OTPStore.delete(email);
    // await redisClient.del(webmail); 
-    req.userData = { webmail };
-    res.status(200).json({ message: "OTP verified", webmail });
+    req.userData = { email };
+    res.status(200).json({ message: "OTP verified", email });
   } else {
     res.status(400);
     throw new Error("Invalid OTP");
@@ -54,7 +54,7 @@ const registerUser2 = asyncHandler(async (req, res ) => {
 
 const registerUser3 = asyncHandler(async (req,res) =>{
   let { name , password, profilepicture }= req.body;
-  const webmail = req.userData ? req.userData.webmail : req.body.webmail;
+  const email = req.userData ? req.userData.email : req.body.email;
   name=name.trim();
   password=password.trim();
   if (!name || !password) {
@@ -70,7 +70,7 @@ const registerUser3 = asyncHandler(async (req,res) =>{
   
   const user = await User.create({
     name,
-    webmail,
+    email,
     password,
     profilepicture,
   });
@@ -78,7 +78,7 @@ const registerUser3 = asyncHandler(async (req,res) =>{
       res.status(201).json({
           _id:user._id,
           name:user.name,
-          webmail:user.webmail,
+          email:user.webmail,
           password:user.password,
           profilepicture:user.profilepicture,
           token:generateToken(user._id),
@@ -90,14 +90,14 @@ const registerUser3 = asyncHandler(async (req,res) =>{
 });
 
 const authUser = asyncHandler(async(req,res)=>{
-    const {webmail,password}=req.body;
-    const  user = await User.findOne({webmail});
+    const {email,password}=req.body;
+    const  user = await User.findOne({email});
     if (user && (await user.matchPassword(password)))
     {
       res.json({
         _id:user._id,
         name:user.name,
-        webmail:user.webmail,
+        email:user.webmail,
         profilepicture:user.profilepicture,
         token: generateToken(user._id),
       });
