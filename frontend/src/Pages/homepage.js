@@ -3,6 +3,7 @@ import {
   Center,
   Container,
   Tab,
+  Flex,
   TabList,
   TabPanel,
   TabPanels,
@@ -24,53 +25,57 @@ function Homepage() {
   }, [history]);
 
   return (
-    <Container maxW="xl" centerContent>
-      <Box
-        d="flex"
-        justifyContent="center"
-        p={3}
-        bg="lightblue"
-        w="100%"
-        opacity="0.95"
-        m="40px 0 15px 0"
-        borderRadius="200"
-        borderWidth="1px"
-        boxShadow="lg"
-      >
-        <Text
-          fontSize="4xl"
-          fontFamily="Work sans"
-          opacity="1"
-          align="center"
-          color="black"
+    <Container maxW="8xl" centerContent mt={10}>
+      <Flex justifyContent="space-between" alignItems="flex-start" w="100%">
+        <Box
+          flex="1"
+          p={100}
+          borderRadius="50"
+          color="blue.50"
+          position="relative"
         >
-          ConnectChat
-        </Text>
-      </Box>
-      <Box
-        bg="lightblue"
-        opacity="0.95"
-        w="100%"
-        p={4}
-        borderRadius="45"
-        borderWidth="1px"
-        boxShadow="lg"
-      >
-        <Tabs isFitted variant="soft-rounded" colorScheme="cyan">
-          <TabList mb="2em">
-            <Tab>Login</Tab>
-            <Tab>Sign Up</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <Login />
-            </TabPanel>
-            <TabPanel>
-              <Signup />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
+          <Text
+            fontSize="4xl"
+            fontFamily="Work Sans"
+            align="center"
+            mb={1}
+            fontWeight="bold"
+          >
+            Welcome to ConnectChat
+          </Text>
+          <Text fontSize="xl" align="justify">
+            Step into a world of seamless connections and vibrant conversations.
+            Join now and discover a new way to connect, share, and laugh
+            together. Sign up or log in to start your chat journey today!
+          </Text>
+        </Box>
+        <Box
+          mb="10em"
+          flex="1"
+          p={8}
+          bg="lightblue"
+          opacity="0.95"
+          w="100%"
+          borderRadius="45"
+          borderWidth="1px"
+          boxShadow="lg"
+        >
+          <Tabs isFitted variant="soft-rounded" colorScheme="cyan">
+            <TabList mb="2em">
+              <Tab _selected={{ color: "black", bg: "cyan.100" }}>Login</Tab>
+              <Tab _selected={{ color: "black", bg: "cyan.100" }}>Sign Up</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Login />
+              </TabPanel>
+              <TabPanel>
+                <Signup />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
+      </Flex>
     </Container>
   );
 }
