@@ -3,43 +3,29 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("./background.png");
+  justify-content: center;
+  align-items: center;
+  background-image: url("./image\ \(1\).png");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 .container {
-  width: 300px; /* Fixed width */
-  height: 400px; /* Fixed height */
+  width: 100%;
+  max-width: 400px;
+  height: auto;
   margin: 50px auto;
   padding: 30px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: rgb(199, 191, 191);
+  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  
-   display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-   
-}
-
-/* App.css */
-.container1 {
-  width: 400px;
-  height:300px;
-  margin: 50px auto;
-  padding: 40px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: rgb(199, 191, 191);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-
- 
+  justify-content: center;
 }
 
 .otp-input {
@@ -61,32 +47,33 @@
   cursor: pointer;
   border-radius: 5px;
   margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
 .blue-button:hover {
-  background-color: #0056b3;
+  background-color: #1a6dc6;
 }
 
 h1 {
   font-size: 28px;
+  color: teal;
 }
 
-.container2{
-  width: 300px; /* Fixed width */
-  height: 200px; /* Fixed height */
+.container2 {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
   margin: 50px auto;
   padding: 30px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: rgb(199, 191, 191);
+  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  
-   display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-   
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .button-container {
@@ -94,7 +81,6 @@ h1 {
   justify-content: center;
   width: 100%;
 }
-
 
 .submit-button {
   background-color: blue;
@@ -105,6 +91,7 @@ h1 {
   cursor: pointer;
   margin-top: 10px;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {

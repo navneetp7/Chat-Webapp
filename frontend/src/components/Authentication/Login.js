@@ -1,7 +1,8 @@
-import { Button } from "@chakra-ui/button";
+import { Button,IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
@@ -12,19 +13,18 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
-//const handleClick = () => setShow(!show);
   const { setUser } = ChatState();
 
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
       toast({
-        title: "Please Fill all the Feilds",
+        title: "Please Fill all the Fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -60,7 +60,7 @@ const Login = () => {
       history.push("/chat");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -74,12 +74,15 @@ const Login = () => {
   return (
     <VStack spacing="10px">
       <FormControl id="email" isRequired>
-        <FormLabel>Email Address</FormLabel>
+        <FormLabel>Webmail</FormLabel>
         <Input
           value={email}
           type="email"
-          placeholder="Enter Your Email Address"
+          placeholder="Enter Your Webmail"
           onChange={(e) => setEmail(e.target.value)}
+          focusBorderColor="teal.500"
+          borderRadius="20"
+          boxShadow="sm"
         />
       </FormControl>
       <FormControl id="password" isRequired>
@@ -90,18 +93,28 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
             placeholder="Enter password"
+            focusBorderColor="teal.500"
+            borderRadius="20"
+            boxShadow="sm"
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
+            <IconButton
+              h="1.75rem"
+              size="lg"
+              onClick={handleClick}
+              icon={show ? <ViewOffIcon /> : <ViewIcon />}
+              aria-label={show ? "Hide password" : "Show password"}
+              bg="transparent"
+              _hover={{ bg: "transparent" }}
+            />
           </InputRightElement>
         </InputGroup>
       </FormControl>
       <Button
-        colorScheme="blue"
+        colorScheme="teal"
         width="100%"
-        style={{ marginTop: 15 }}
+        mt={4}
+        borderRadius="20"
         onClick={submitHandler}
         isLoading={loading}
       >
@@ -109,8 +122,10 @@ const Login = () => {
       </Button>
       <Button
         variant="solid"
-        colorScheme="red"
+        colorScheme="orange"
         width="100%"
+        mt={2}
+        borderRadius="20"
         onClick={() => {
           setEmail("guest@example.com");
           setPassword("123456");

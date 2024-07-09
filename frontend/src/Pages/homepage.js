@@ -12,7 +12,7 @@ import {
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import Login from "../components/Authentication/Login";
-import Signup from "../components/Authentication/EmailPage";
+import Signup from "../components/Authentication/EmailPage"; // Fixed import for Signup
 
 function Homepage() {
   const history = useHistory();
@@ -29,19 +29,35 @@ function Homepage() {
         d="flex"
         justifyContent="center"
         p={3}
-        bg="white"
+        bg="lightblue"
         w="100%"
+        opacity="0.95"
         m="40px 0 15px 0"
-        borderRadius="lg"
+        borderRadius="200"
         borderWidth="1px"
+        boxShadow="lg"
       >
-        <Text fontSize="4xl" fontFamily="Work sans" align="center">
-          Chat-WebApp
+        <Text
+          fontSize="4xl"
+          fontFamily="Work sans"
+          opacity="1"
+          align="center"
+          color="black"
+        >
+          ConnectChat
         </Text>
       </Box>
-      <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
-        <Tabs isFitted variant="soft-rounded">
-          <TabList mb="1em">
+      <Box
+        bg="lightblue"
+        opacity="0.95"
+        w="100%"
+        p={4}
+        borderRadius="45"
+        borderWidth="1px"
+        boxShadow="lg"
+      >
+        <Tabs isFitted variant="soft-rounded" colorScheme="cyan">
+          <TabList mb="2em">
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
           </TabList>
