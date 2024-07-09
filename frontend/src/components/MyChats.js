@@ -29,7 +29,7 @@ const MyChats = ({ fetchAgain }) => {
       setChats(data);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: "Failed to Load the chats",
         status: "error",
         duration: 5000,
@@ -47,69 +47,72 @@ const MyChats = ({ fetchAgain }) => {
 
   return (
     <Box
-      d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
-      flexDir="column"
+      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      flexDirection="column"
       alignItems="center"
-      p={3}
-      bg="white"
-      w={{ base: "100%", md: "31%" }}
+      padding={3}
+      background="white"
+      width={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
+      boxShadow="lg"
     >
       <Box
-        pb={3}
-        px={3}
-        fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
-        d="flex"
-        w="100%"
+        paddingBottom={3}
+        paddingX={3}
+        fontSize={{ base: "24px", md: "28px" }}
+        fontFamily="Work Sans, sans-serif"
+        display="flex"
+        width="100%"
         justifyContent="space-between"
         alignItems="center"
+        borderBottom="1px solid #e2e8f0"
       >
         My Chats
         <GroupChatModal>
           <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            fontSize={{ base: "14px", md: "16px" }}
             rightIcon={<AddIcon />}
+            colorScheme="teal"
           >
             New Group Chat
           </Button>
         </GroupChatModal>
       </Box>
       <Box
-        d="flex"
-        flexDir="column"
-        p={3}
-        bg="#F8F8F8"
-        w="100%"
-        h="100%"
+        display="flex"
+        flexDirection="column"
+        padding={3}
+        background="#F8F8F8"
+        width="100%"
+        height="100%"
         borderRadius="lg"
-        overflowY="hidden"
+        overflowY="auto"
       >
         {chats ? (
-          <Stack overflowY="scroll">
+          <Stack spacing={3}>
             {chats.map((chat) => (
               <Box
+                key={chat._id}
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+                background={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
-                px={3}
-                py={2}
+                padding={3}
                 borderRadius="lg"
-                key={chat._id}
+                transition="background 0.3s, color 0.3s"
+                _hover={{ background: "#cbd5e0" }}
               >
-                <Text>
+                <Text fontWeight="semibold" fontSize="md">
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
                 {chat.latestMessage && (
-                  <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
+                  <Text fontSize="sm" color="gray.600">
+                    <b>{chat.latestMessage.sender.name}:</b>{" "}
                     {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
+                      ? `${chat.latestMessage.content.substring(0, 50)}...`
                       : chat.latestMessage.content}
                   </Text>
                 )}
