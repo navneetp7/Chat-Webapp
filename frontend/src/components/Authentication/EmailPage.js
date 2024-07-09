@@ -1,62 +1,93 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Button } from "@chakra-ui/button";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input } from "@chakra-ui/input";
+import { VStack } from "@chakra-ui/layout";
+import { useState } from "react";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
-function EmailInput() {
-  const [email, setEmail] = useState("");
+const EmailPage = () => {
+  const [email, setEmail] = useState(""); // Initialize as an empty string
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const history = useHistory();
+  const { setUser } = ChatState();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const submitHandler = async () => {
+    setLoading(true);
+    if (!email) {
+      toast({
+        title: "Please fill all the fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Replace with your backend API endpoint
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
 
-      const response = await axios.post("/api/user/register/step1", { email });
+      const { data } = await axios.post(
+        "/api/user/register/step1",
+        { email },
+        config
+      );
 
-      if (response.data.success) {
-        // Navigate to the OTP page if the email is successfully submitted
-        history.push("/register/step2");
-      } else {
-        alert("Failed to send OTP. Please try again.");
-      }
+      toast({
+        title: "Login Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setUser(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      history.push("/register/step2");
     } catch (error) {
-      console.error("Error sending email:", error);
-      alert("An error occurred while sending the OTP. Please try again.");
+      toast({
+        title: "Error Occurred!",
+        description: error.response?.data?.message || error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <div>
-            <b>Email Address:</b>
-          </div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter Your Email Address"
-            required
-            style={{
-              border: "1px solid grey",
-              padding: "10px",
-              borderRadius: "4px",
-              outline: "none",
-              margin: "10px 0",
-              width: "100%",
-              maxWidth: "500px",
-            }}
-          />
-        </label>
-        <div className="button-container">
-          <button type="submit" className="submit-button">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+    <VStack spacing="10px">
+      <FormControl id="email" isRequired>
+        <FormLabel>Email Address</FormLabel>
+        <Input
+          value={email}
+          type="email"
+          placeholder="Enter Your Email Address"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </FormControl>
+      <Button
+        colorScheme="blue"
+        width="100%"
+        style={{ marginTop: 15 }}
+        onClick={submitHandler}
+        isLoading={loading}
+      >
+        Submit
+      </Button>
+    </VStack>
   );
-}
+};
 
-export default EmailInput;
+export default EmailPage;
