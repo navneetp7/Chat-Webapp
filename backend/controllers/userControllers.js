@@ -3,8 +3,9 @@ const User = require("../models/userModels");
 const generateToken =require("../config/generateToken");
 const generateOTP=require("../utils/otp-generator");
 const sendEmail= require("../utils/nodemailer");
-//const redisClient = require ("../config/redisClient");
-const OTPStore = new Map(); // In-memory storage for OTPs
+const redisClient = require ("../config/redisClient");
+const jwt = require("jsonwebtoken");
+// const OTPStore = new Map(); // In-memory storage for OTPs
 
 const registerUser1 = asyncHandler(async (req, res ) => {
   const { email } = req.body;
@@ -22,29 +23,37 @@ const registerUser1 = asyncHandler(async (req, res ) => {
     throw new Error("User already exists");
   }
   const otp = generateOTP();
-  //await redisClient.setEx(webmail, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
-  OTPStore.set(email, otp);
+  await redisClient.setEx(email, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
+  // OTPStore.set(email, otp);
   await sendEmail(email, "OTP VERIFICATION", `Your OTP is ${otp}`);
-  req.userData = { email };
-  res.status(200).json({ message: "Webmail accepted,OTP sent" });
+  const token = generateToken({ email, step: 1 }); // Generate token with email and step
+  res.status(200).json({ message: "Webmail accepted,OTP sent",token });
   //next();
 });
 
 const registerUser2 = asyncHandler(async (req, res ) => {
   const { otp } = req.body;
-  const email = req.userData ? req.userData.email : req.body.email;
-  // res.status(200).json({message:"OTP yet to be done",webmail});
+  const token = req.headers.authorization.split(" ")[1];
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    res.status(401);
+    throw new Error("Invalid token");
+  }
+
+  const email = decoded.email;
   if (!otp) {
     res.status(400);
     throw new Error("Please enter otp");
   }
-  const storedOTP = OTPStore.get(email);
-  //const storedOTP = await redisClient.get(webmail); // Retrieve OTP from Redis
+  // const storedOTP = OTPStore.get(email);
+  const storedOTP = await redisClient.get(email); // Retrieve OTP from Redis
   if (storedOTP && storedOTP == otp) {
-  OTPStore.delete(email);
-   // await redisClient.del(webmail); 
-    req.userData = { email };
-    res.status(200).json({ message: "OTP verified", email });
+    // OTPStore.delete(email);
+    await redisClient.del(email);
+    const newToken = generateToken({ email, otpVerified: true, step: 2 }); // Generate token with email and otpVerified
+    res.status(200).json({ message: "OTP verified", email ,token:newToken });
   } else {
     res.status(400);
     throw new Error("Invalid OTP");
@@ -54,7 +63,23 @@ const registerUser2 = asyncHandler(async (req, res ) => {
 
 const registerUser3 = asyncHandler(async (req,res) =>{
   let { name , password, profilepicture }= req.body;
-  const email = req.userData ? req.userData.email : req.body.email;
+  const token = req.headers.authorization.split(" ")[1];
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    res.status(401);
+    throw new Error("Invalid token");
+  }
+
+  const email = decoded.email;
+  const otpVerified = decoded.otpVerified;
+  if (!otpVerified) {
+    res.status(400);
+    throw new Error("OTP not verified");
+  }
+
   name=name.trim();
   password=password.trim();
   if (!name || !password) {
@@ -81,7 +106,7 @@ const registerUser3 = asyncHandler(async (req,res) =>{
           email:user.webmail,
           password:user.password,
           profilepicture:user.profilepicture,
-          token:generateToken(user._id),
+          token:generateToken({id:user._id}),
         })
     } else{
     res.status(400);
@@ -102,7 +127,7 @@ const authUser = asyncHandler(async(req,res)=>{
         name:user.name,
         email:user.webmail,
         profilepicture:user.profilepicture,
-        token: generateToken(user._id),
+        token: generateToken({id:user._id}),
       });
     } else {
       res.status(401);
