@@ -5,7 +5,6 @@ const generateToken = (payload) => {
     console.log(payload);
     throw new Error("Expected payload to be a plain object.");
   }
-  console.log(payload);
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
