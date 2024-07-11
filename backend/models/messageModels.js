@@ -7,7 +7,7 @@ const messagemodel= mongoose.Schema(
         readBy:[{type:mongoose.Schema.Types.ObjectId,ref:"User"}],
     },
     {
-        timespamps:true,
+        timestamps:true,
     },
 );
 

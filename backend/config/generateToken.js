@@ -1,9 +1,12 @@
 const jwt = require("jsonwebtoken");
 
-const generateToken = (id) => {
-    return jwt.sign({id},process.env.JWT_SECRET,{
-        expiresIn:"30d",
-    });
+const generateToken = (payload) => {
+  if (typeof payload !== "object" || payload === null) {
+    console.log(payload);
+    throw new Error("Expected payload to be a plain object.");
+  }
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
 };
-
-module.exports=generateToken;
+module.exports = generateToken;
