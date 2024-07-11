@@ -5,19 +5,15 @@ import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
-import { ChatState } from "../../Context/ChatProvider";
 
-const EmailPage = () => {
-  const [email, setEmail] = useState(""); // Initialize as an empty string
+const EmailPage = ({ setEmail, nextStep }) => {
+  const [emailInput, setEmailInput] = useState(""); // Initialize as an empty string
   const [loading, setLoading] = useState(false);
   const toast = useToast();
-  const history = useHistory();
-  const { setUser } = ChatState();
 
   const submitHandler = async () => {
     setLoading(true);
-    if (!email) {
+    if (!emailInput) {
       toast({
         title: "Please fill all the fields",
         status: "warning",
@@ -38,21 +34,20 @@ const EmailPage = () => {
 
       const { data } = await axios.post(
         "/api/user/register/step1",
-        { email },
+        { email: emailInput },
         config
       );
 
       toast({
-        title: "Login Successful",
+        title: "Email Submitted Successfully",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
-      setUser(data);
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      setEmail(emailInput);
       setLoading(false);
-      history.push("/register/step2");
+      nextStep(); // Move to the next step
     } catch (error) {
       toast({
         title: "Error Occurred!",
@@ -71,10 +66,10 @@ const EmailPage = () => {
       <FormControl id="email" isRequired>
         <FormLabel>Email Address</FormLabel>
         <Input
-          value={email}
+          value={emailInput}
           type="email"
           placeholder="Enter Your Email Address"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmailInput(e.target.value)}
         />
       </FormControl>
       <Button

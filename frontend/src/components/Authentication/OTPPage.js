@@ -1,12 +1,17 @@
 import React, { useRef } from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
-import "../../App.css";
+import {
+  VStack,
+  HStack,
+  Input,
+  Button,
+  useToast,
+  Heading,
+} from "@chakra-ui/react";
 
-const OTPPage = () => {
+const OTPPage = ({ email, setOtp, nextStep }) => {
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const history = useHistory();
-  const location = useLocation();
+  const toast = useToast();
 
   const handleChange = (e, index) => {
     const value = e.target.value;
@@ -20,49 +25,84 @@ const OTPPage = () => {
     const otp = otpInputRefs.map((ref) => ref.current.value).join("");
     if (otp.length === 4) {
       try {
-        // Replace with your backend API endpoint
-        const response = await axios.post(
-          "/api/user/registerUser2",
-          {
-            otp,
-            ...location.state,
-          }
+
+     const config = {
+       headers: {
+        "Content-type": "application/json",
+      },
+      };
+
+        const response = await axios.post("/api/user/register/step2", {
+          otp
+        },
+        config
         );
         if (response.data.success) {
-          history.push("/signup", { ...location.state, otp });
+          setOtp(otp);
+          nextStep();
         } else {
-          alert("Invalid OTP. Please try again.");
+          toast({
+            title: "Invalid OTP",
+            description: "Please try again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
         }
       } catch (error) {
         console.error("Error verifying OTP:", error);
-        alert("An error occurred while verifying the OTP. Please try again.");
+        toast({
+          title: "Error Occurred",
+          description:
+            "An error occurred while verifying the OTP. Please try again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
       }
     } else {
-      alert("Please enter the 4-digit OTP.");
+      toast({
+        title: "Invalid OTP",
+        description: "Please enter the 4-digit OTP.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
 
   return (
-    <div className="container1">
-      <h1><b>Enter OTP</b></h1>
+    <VStack spacing="10px">
+      <Heading as="h1" size="lg">
+        Enter OTP
+      </Heading>
       <form onSubmit={handleSubmit}>
-        {otpInputRefs.map((ref, index) => (
-          <input
-            key={index}
-            type="text"
-            maxLength="1"
-            className="otp-input"
-            ref={ref}
-            onChange={(e) => handleChange(e, index)}
-          />
-        ))}
-        <div>
-          <button className="blue-button" type="submit">
-            Submit
-          </button>
-        </div>
+        <HStack spacing="5px">
+          {otpInputRefs.map((ref, index) => (
+            <Input
+              key={index}
+              type="text"
+              maxLength="1"
+              ref={ref}
+              onChange={(e) => handleChange(e, index)}
+              textAlign="center"
+              width="50px"
+            />
+          ))}
+        </HStack>
+        <Button
+          colorScheme="blue"
+          width="100%"
+          style={{ marginTop: 15 }}
+          type="submit"
+        >
+          Submit
+        </Button>
       </form>
-    </div>
+    </VStack>
   );
 };
 

@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import Chatpage from "./Pages/Chatpage";
+import Chatpage from "./Pages/ChatPage";
 import Homepage from "./Pages/homepage";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";

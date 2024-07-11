@@ -10,10 +10,14 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/EmailPage"; // Fixed import for Signup
+import EmailPage from "../components/Authentication/EmailPage";
+import OTPPage from "../components/Authentication/OTPPage";
+
+import Formpage from "../components/Authentication/Formpage";
 
 function Homepage() {
   const history = useHistory();
@@ -23,6 +27,7 @@ function Homepage() {
 
     if (user) history.push("/chat");
   }, [history]);
+
 
   return (
     <Container maxW="8xl" centerContent mt={10}>
@@ -70,7 +75,7 @@ function Homepage() {
                 <Login />
               </TabPanel>
               <TabPanel>
-                <Signup />
+                <Formpage />
               </TabPanel>
             </TabPanels>
           </Tabs>
