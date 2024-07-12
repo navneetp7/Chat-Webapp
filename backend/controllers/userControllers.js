@@ -25,7 +25,7 @@ const registerUser1 = asyncHandler(async (req, res) => {
     const otp = generateOTP();
     await redisClient.setEx(email, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
     await sendEmail(email, "OTP VERIFICATION", `Your OTP is ${otp}`);
-    const token = generateToken({ email:email, step: 1 }); // Generate token with email and step
+    const token = generateToken({ email:email}); // Generate token with email and step
     res.status(200).json({ message: "Email accepted, OTP sent", token });
 });
 
@@ -49,8 +49,7 @@ const registerUser2 = asyncHandler(async (req, res) => {
   const storedOTP = await redisClient.get(email); // Retrieve OTP from Redis
   if (storedOTP && storedOTP == otp) {
         await redisClient.del(email);
-        const newToken = generateToken({ email: email, otpVerified: true, step: 2 }); // Generate token with email and otpVerified
-        res.status(200).json({ message: "OTP verified", email, token: newToken });
+        res.status(200).json({ message: "OTP verified", email, token});
     } else {
         res.status(400);
         throw new Error("Invalid OTP");
