@@ -17,7 +17,7 @@ import animationData from "../animations/typing.json";
 import "./styles.css";
 
 const ENDPOINT = "http://localhost:8000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
-let socket, selectedChatCompare;
+var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
