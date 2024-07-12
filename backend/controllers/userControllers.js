@@ -83,14 +83,7 @@ const registerUser3 = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("Invalid token in step3");
   }
-
   const email = decoded.email;
-  const otpVerified = decoded.otpVerified;
-  if (!otpVerified) {
-    res.status(400);
-    throw new Error("OTP not verified");
-  }
-
   name = name.trim();
   password = password.trim();
   if (!name || !password) {
