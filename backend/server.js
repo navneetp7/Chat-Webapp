@@ -5,8 +5,8 @@ const connectdb = require("./config/db.js"); // Database mongodb
 const colors = require("colors");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes.js");
-const chatRoutes = require("../backend/routes/chatRoutes.js");
-const messageRoutes = require("../backend/routes/messageRoutes.js");
+const chatRoutes = require("./routes/chatRoutes.js");
+const messageRoutes = require("./routes/messageRoutes.js");
 const responses = require("./utils/responses.js").default;
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 

@@ -12,7 +12,6 @@ import {
 const OTPPage = ({ email, setOtp, nextStep }) => {
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const toast = useToast();
-
   const handleChange = (e, index) => {
     const value = e.target.value;
     if (value.length === 1 && index < otpInputRefs.length - 1) {
@@ -28,9 +27,9 @@ const OTPPage = ({ email, setOtp, nextStep }) => {
 
      const config = {
        headers: {
-        "Content-type": "application/json",
-      },
-      };
+         "Content-type": "application/json",
+       },
+     };
 
         const response = await axios.post("/api/user/register/step2", {
           otp

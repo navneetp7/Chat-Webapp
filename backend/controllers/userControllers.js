@@ -31,30 +31,40 @@ const registerUser1 = asyncHandler(async (req, res) => {
 
 // Register Step 2
 const registerUser2 = asyncHandler(async (req, res) => {
-    const { otp } = req.body;
-    const token = req.headers.authorization.split(" ")[1];
-    let decoded;
-    try {
-        decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (err) {
-        res.status(401);
-        throw new Error("Invalid token");
-    }
+  const { otp } = req.body;
+  const token = req.headers.authorization.split(" ")[1];
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    console.error("Token verification failed:", err); // Add this line for debugging
+    res.status(401);
+    throw new Error("Invalid token");
+  }
 
-    const email = decoded.email;
-    if (!otp) {
-        res.status(400);
-        throw new Error("Please enter OTP");
-    }
+  const email = decoded.email;
+  console.log("Decoded email:", email); // Add this line for debugging
+
+  if (!otp) {
+    res.status(400);
+    throw new Error("Please enter OTP");
+  }
+
   const storedOTP = await redisClient.get(email); // Retrieve OTP from Redis
+  console.log("Stored OTP:", storedOTP, "Entered OTP:", otp); // Add this line for debugging
+
   if (storedOTP && storedOTP == otp) {
-        await redisClient.del(email);
-        const newToken = generateToken({ email: email, otpVerified: true, step: 2 }); // Generate token with email and otpVerified
-        res.status(200).json({ message: "OTP verified", email, token: newToken });
-    } else {
-        res.status(400);
-        throw new Error("Invalid OTP");
-    }
+    await redisClient.del(email);
+    const newToken = generateToken({
+      email: email,
+      otpVerified: true,
+      step: 2,
+    }); // Generate token with email and otpVerified
+    res.status(200).json({ message: "OTP verified", email, token: newToken });
+  } else {
+    res.status(400);
+    throw new Error("Invalid OTP");
+  }
 });
 
 // Register Step 3
