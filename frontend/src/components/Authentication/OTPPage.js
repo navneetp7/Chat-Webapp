@@ -82,7 +82,7 @@ const OTPPage = ({ email, token, setToken, setOtp, nextStep }) => {
 
   return (
     <VStack spacing="10px">
-      <Heading as="h1" size="lg">
+      <Heading as="h1" size="lg" color="Black" >
         Enter OTP
       </Heading>
       <form onSubmit={handleSubmit}>
@@ -100,10 +100,11 @@ const OTPPage = ({ email, token, setToken, setOtp, nextStep }) => {
           ))}
         </HStack>
         <Button
-          colorScheme="blue"
+          colorScheme="teal"
           width="100%"
           style={{ marginTop: 15 }}
           type="submit"
+          borderRadius="50"
         >
           Submit
         </Button>

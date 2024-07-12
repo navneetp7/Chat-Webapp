@@ -74,7 +74,7 @@ const Login = () => {
   return (
     <VStack spacing="10px">
       <FormControl id="email" isRequired>
-        <FormLabel>Webmail</FormLabel>
+        <FormLabel size="lg" >Webmail</FormLabel>
         <Input
           value={email}
           type="email"
@@ -82,7 +82,6 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           focusBorderColor="teal.500"
           borderRadius="20"
-          boxShadow="sm"
         />
       </FormControl>
       <FormControl id="password" isRequired>
@@ -95,7 +94,6 @@ const Login = () => {
             placeholder="Enter password"
             focusBorderColor="teal.500"
             borderRadius="20"
-            boxShadow="sm"
           />
           <InputRightElement width="4.5rem">
             <IconButton

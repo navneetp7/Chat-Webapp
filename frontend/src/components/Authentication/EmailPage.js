@@ -75,16 +75,18 @@ const EmailPage = ({ setEmail, setToken, nextStep }) => {
         <Input
           value={emailInput}
           type="email"
+          borderRadius="20"
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmailInput(e.target.value)}
         />
       </FormControl>
       <Button
-        colorScheme="blue"
+        colorScheme="teal"
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
         isLoading={loading}
+        borderRadius="20"
       >
         Submit
       </Button>

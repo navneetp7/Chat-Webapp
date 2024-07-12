@@ -30,10 +30,10 @@ function Homepage() {
 
 
   return (
-    <Container maxW="8xl" centerContent mt={10}>
+    <Container maxW="8xl" centerContent mt={20}>
       <Flex justifyContent="space-between" alignItems="flex-start" w="100%">
         <Box
-          flex="1"
+          flex="0.9"
           p={100}
           borderRadius="50"
           color="blue.50"
@@ -43,12 +43,12 @@ function Homepage() {
             fontSize="4xl"
             fontFamily="Work Sans"
             align="center"
-            mb={1}
+            mb={7}
             fontWeight="bold"
           >
             Welcome to ConnectChat
           </Text>
-          <Text fontSize="xl" align="justify">
+          <Text fontSize="xl" align="justify" >
             Step into a world of seamless connections and vibrant conversations.
             Join now and discover a new way to connect, share, and laugh
             together. Sign up or log in to start your chat journey today!
@@ -57,13 +57,11 @@ function Homepage() {
         <Box
           mb="10em"
           flex="1"
-          p={8}
+          p={7}
           bg="lightblue"
           opacity="0.95"
           w="100%"
-          borderRadius="45"
-          borderWidth="1px"
-          boxShadow="lg"
+          borderRadius="50"
         >
           <Tabs isFitted variant="soft-rounded" colorScheme="cyan">
             <TabList mb="2em">
