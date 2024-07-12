@@ -1,20 +1,19 @@
+import React, { useState, useRef } from "react";
 import { Button, Container, Box, Avatar } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useState, useRef } from "react";
 import { useHistory } from "react-router";
 
-const Signup = () => {
+const Signup = ({ token }) => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const history = useHistory();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [password, setPassword] = useState("");
   const [pic, setPic] = useState("");
@@ -43,25 +42,33 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
+      setPicLoading(false);
       return;
     }
-    console.log(name, password, pic);
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       };
+
+      const payload = {
+        name,
+        password,
+        profilepicture: pic,
+      };
+
+      console.log("Sending registration request:", payload);
+
       const { data } = await axios.post(
-        "/api/user/registerUser3",
-        {
-          name,
-          password,
-          pic,
-        },
+        "/api/user/register/step3",
+        payload,
         config
       );
-      console.log(data);
+
+      console.log("Received response:", data);
+
       toast({
         title: "Registration successful",
         status: "success",
@@ -73,9 +80,10 @@ const Signup = () => {
       setPicLoading(false);
       history.push("/chat");
     } catch (error) {
+      console.error("Error during registration:", error.response || error);
       toast({
         title: "Error occurred!",
-        description: error.response.data.message,
+        description: error.response?.data?.message || error.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -98,7 +106,6 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
-    console.log(pics);
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -111,7 +118,6 @@ const Signup = () => {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
-          console.log(data.url.toString());
           setPicLoading(false);
         })
         .catch((err) => {

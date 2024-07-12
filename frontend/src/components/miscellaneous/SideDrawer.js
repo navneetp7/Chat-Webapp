@@ -142,12 +142,14 @@ function SideDrawer() {
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans">
-          Talk-A-Tive
+          ConnectChat
         </Text>
         <div>
           <Menu>
             <MenuButton p={1}>
-             
+              
+              
+
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
             <MenuList pl={2}>

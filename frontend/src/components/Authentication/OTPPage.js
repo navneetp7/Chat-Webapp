@@ -9,7 +9,7 @@ import {
   Heading,
 } from "@chakra-ui/react";
 
-const OTPPage = ({ email, setOtp, nextStep }) => {
+const OTPPage = ({ email, token, setToken, setOtp, nextStep }) => {
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const toast = useToast();
 
@@ -25,20 +25,30 @@ const OTPPage = ({ email, setOtp, nextStep }) => {
     const otp = otpInputRefs.map((ref) => ref.current.value).join("");
     if (otp.length === 4) {
       try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-     const config = {
-       headers: {
-        "Content-type": "application/json",
-      },
-      };
+        console.log("Sending OTP verification request:", { otp, config });
 
-        const response = await axios.post("/api/user/register/step2", {
-          otp
-        },
-        config
+        const response = await axios.post(
+          "/api/user/register/step2",
+          { otp },
+          config
         );
-        if (response.data.success) {
+
+        console.log("Received response:", response);
+
+        if (response.status === 200) {
+          const { token: newToken } = response.data;
+
           setOtp(otp);
+          setToken(newToken); // Update the token
+          localStorage.setItem("userToken", newToken);
+
           nextStep();
         } else {
           toast({
@@ -54,8 +64,7 @@ const OTPPage = ({ email, setOtp, nextStep }) => {
         console.error("Error verifying OTP:", error);
         toast({
           title: "Error Occurred",
-          description:
-            "An error occurred while verifying the OTP. Please try again.",
+          description: error.response?.data?.message || error.message,
           status: "error",
           duration: 5000,
           isClosable: true,

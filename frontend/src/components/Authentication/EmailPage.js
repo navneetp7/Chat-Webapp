@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 
-const EmailPage = ({ setEmail, nextStep }) => {
+const EmailPage = ({ setEmail, setToken, nextStep }) => {
   const [emailInput, setEmailInput] = useState(""); // Initialize as an empty string
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -40,12 +40,19 @@ const EmailPage = ({ setEmail, nextStep }) => {
 
       toast({
         title: "Email Submitted Successfully",
+        description: data.message,
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
+
+      // Store token in local state
+      setToken(data.token);
+
+      // Update state with email
       setEmail(emailInput);
+
       setLoading(false);
       nextStep(); // Move to the next step
     } catch (error) {
