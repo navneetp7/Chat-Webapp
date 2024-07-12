@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Container,
   Tab,
   Flex,
@@ -10,12 +9,12 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useHistory } from "react-router";
 import Login from "../components/Authentication/Login";
-import Signup from "../components/Authentication/EmailPage"; // Fixed import for Signup
-import EmailPage from "../components/Authentication/EmailPage";
-import OTPPage from "../components/Authentication/OTPPage";
+// import Signup from "../components/Authentication/EmailPage"; // Fixed import for Signup
+// import EmailPage from "../components/Authentication/EmailPage";
+// import OTPPage from "../components/Authentication/OTPPage";
 
 import Formpage from "../components/Authentication/Formpage";
 
