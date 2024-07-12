@@ -10,23 +10,23 @@ const jwt = require("jsonwebtoken");
 const registerUser1 = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  if (!email) {
-    res.status(400);
-    throw new Error("Please enter an email");
-  } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    res.status(400);
-    throw new Error("Please enter a valid email");
-  }
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-  const otp = generateOTP();
-  await redisClient.setEx(email, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
-  await sendEmail(email, "OTP VERIFICATION", `Your OTP is ${otp}`);
-    const token = generateToken({ email:email, step: 1 }); // Generate token with email and step
-  res.status(200).json({ message: "Email accepted, OTP sent", token });
+    if (!email) {
+        res.status(400);
+        throw new Error("Please enter an email");
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        res.status(400);
+        throw new Error("Please enter a valid email");
+    }
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        res.status(400);
+        throw new Error("User already exists");
+    }
+    const otp = generateOTP();
+    await redisClient.setEx(email, 600, otp); // Store OTP in Redis with a TTL of 600 seconds (10 minutes)
+    await sendEmail(email, "OTP VERIFICATION", `Your OTP is ${otp}`);
+    const token = generateToken({ email:email}); // Generate token with email and step
+    res.status(200).json({ message: "Email accepted, OTP sent", token });
 });
 
 // Register Step 2
@@ -47,31 +47,19 @@ const registerUser2 = asyncHandler(async (req, res) => {
     return;
   }
 
-  const email = decoded.email;
-  if (!otp) {
-    res.status(400).json({ message: "Please enter OTP" });
-    return;
-  }
-
-  const storedOTP = await redisClient.get(email);
-  console.log(
-    "Stored OTP from Redis:",
-    storedOTP,
-    "Received OTP from client:",
-    otp
-  );
-
-  if (storedOTP && storedOTP === otp) {
-    await redisClient.del(email);
-    const newToken = generateToken({
-      email: email,
-      otpVerified: true,
-      step: 2,
-    });
-    res.status(200).json({ message: "OTP verified", email, token: newToken });
-  } else {
-    res.status(400).json({ message: "Invalid OTP" });
-  }
+    const email = decoded.email;
+    if (!otp) {
+        res.status(400);
+        throw new Error("Please enter OTP");
+    }
+  const storedOTP = await redisClient.get(email); // Retrieve OTP from Redis
+  if (storedOTP && storedOTP == otp) {
+        await redisClient.del(email);
+        res.status(200).json({ message: "OTP verified", email, token});
+    } else {
+        res.status(400);
+        throw new Error("Invalid OTP");
+    }
 });
 
 // Register Step 3
