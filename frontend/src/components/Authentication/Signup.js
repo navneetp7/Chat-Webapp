@@ -12,7 +12,6 @@ const Signup = ({ token }) => {
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const history = useHistory();
-
   const [name, setName] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [password, setPassword] = useState("");

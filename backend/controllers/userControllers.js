@@ -31,47 +31,30 @@ const registerUser1 = asyncHandler(async (req, res) => {
 
 // Register Step 2
 const registerUser2 = asyncHandler(async (req, res) => {
-  const { otp } = req.body;
-  const token = req.headers.authorization.split(" ")[1];
+    const { otp } = req.body;
+    const token = req.headers.authorization.split(" ")[1];
+    let decoded;
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+        res.status(401);
+        throw new Error("Invalid token");
+    }
 
-  console.log("Received OTP:", otp);
-  console.log("Received Token:", token);
-
-  let decoded;
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded Token:", decoded);
-  } catch (err) {
-    console.error("Token verification failed:", err);
-    res.status(401).json({ message: "Invalid token" });
-    return;
-  }
-
-  const email = decoded.email;
-  if (!otp) {
-    res.status(400).json({ message: "Please enter OTP" });
-    return;
-  }
-
-  const storedOTP = await redisClient.get(email);
-  console.log(
-    "Stored OTP from Redis:",
-    storedOTP,
-    "Received OTP from client:",
-    otp
-  );
-
-  if (storedOTP && storedOTP === otp) {
-    await redisClient.del(email);
-    const newToken = generateToken({
-      email: email,
-      otpVerified: true,
-      step: 2,
-    });
-    res.status(200).json({ message: "OTP verified", email, token: newToken });
-  } else {
-    res.status(400).json({ message: "Invalid OTP" });
-  }
+    const email = decoded.email;
+    if (!otp) {
+        res.status(400);
+        throw new Error("Please enter OTP");
+    }
+  const storedOTP = await redisClient.get(email); // Retrieve OTP from Redis
+  if (storedOTP && storedOTP == otp) {
+        await redisClient.del(email);
+        const newToken = generateToken({ email: email, otpVerified: true, step: 2 }); // Generate token with email and otpVerified
+        res.status(200).json({ message: "OTP verified", email, token: newToken });
+    } else {
+        res.status(400);
+        throw new Error("Invalid OTP");
+    }
 });
 
 

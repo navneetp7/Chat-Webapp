@@ -12,7 +12,6 @@ import {
 const OTPPage = ({ email, token, setToken, setOtp, nextStep }) => {
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const toast = useToast();
-
   const handleChange = (e, index) => {
     const value = e.target.value;
     if (value.length === 1 && index < otpInputRefs.length - 1) {
@@ -25,14 +24,12 @@ const OTPPage = ({ email, token, setToken, setOtp, nextStep }) => {
     const otp = otpInputRefs.map((ref) => ref.current.value).join("");
     if (otp.length === 4) {
       try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        };
 
-        console.log("Sending OTP verification request:", { otp, config });
+     const config = {
+       headers: {
+        "Content-type": "application/json",
+      },
+      };
 
         const response = await axios.post(
           "/api/user/register/step2",
