@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
-import { Button, Container, Box, Avatar } from "@chakra-ui/react";
+import { Button, Container, Box, Avatar, IconButton } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useHistory } from "react-router";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 const Signup = ({ token }) => {
   const [show, setShow] = useState(false);
@@ -142,17 +143,17 @@ const Signup = ({ token }) => {
         d="flex"
         justifyContent="center"
         p={3}
-        bg="white"
+        bg="cyan."
         w="100%"
         m="40px 0 15px 0"
         borderRadius="lg"
-        borderWidth="1px"
+        borderWidth="0px"
       >
         <VStack spacing="5px">
           <Box textAlign="center" mb={4}>
             <Avatar
               size="xl"
-              name="Profile Picture"
+              name="Pictu"
               src={pic}
               cursor="pointer"
               onClick={() => inputFileRef.current.click()}
@@ -170,7 +171,7 @@ const Signup = ({ token }) => {
               cursor="pointer"
               onClick={() => inputFileRef.current.click()}
             >
-              Upload your Picture
+              Upload Profile Pic
             </FormLabel>
           </Box>
 
@@ -179,6 +180,8 @@ const Signup = ({ token }) => {
             <Input
               placeholder="Enter Your Name"
               onChange={(e) => setName(e.target.value)}
+              borderRadius="20"
+              focusBorderColor="teal.500"
             />
           </FormControl>
 
@@ -189,11 +192,19 @@ const Signup = ({ token }) => {
                 type={show ? "text" : "password"}
                 placeholder="Enter Password"
                 onChange={(e) => setPassword(e.target.value)}
+                borderRadius="20"
+                focusBorderColor="teal.500"
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? "Hide" : "Show"}
-                </Button>
+                <IconButton
+                  h="1.75rem"
+                  size="lg"
+                  onClick={handleClick}
+                  icon={show ? <ViewOffIcon /> : <ViewIcon />}
+                  aria-label={show ? "Hide password" : "Show password"}
+                  bg="transparent"
+                  _hover={{ bg: "transparent" }}
+                />
               </InputRightElement>
             </InputGroup>
           </FormControl>
@@ -205,21 +216,30 @@ const Signup = ({ token }) => {
                 type={show ? "text" : "password"}
                 placeholder="Confirm Password"
                 onChange={(e) => setConfirmpassword(e.target.value)}
+                borderRadius="20"
+                focusBorderColor="teal.500"
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? "Hide" : "Show"}
-                </Button>
+                <IconButton
+                  h="1.75rem"
+                  size="lg"
+                  onClick={handleClick}
+                  icon={show ? <ViewOffIcon /> : <ViewIcon />}
+                  aria-label={show ? "Hide password" : "Show password"}
+                  bg="transparent"
+                  _hover={{ bg: "transparent" }}
+                />
               </InputRightElement>
             </InputGroup>
           </FormControl>
 
           <Button
-            colorScheme="blue"
+            colorScheme="teal"
             width="100%"
             style={{ marginTop: 15 }}
             onClick={submitHandler}
             isLoading={picLoading}
+            borderRadius="20"
           >
             Sign Up
           </Button>

@@ -64,7 +64,7 @@ const registerUser2 = asyncHandler(async (req, res) => {
 
 // Register Step 3
 const registerUser3 = asyncHandler(async (req, res) => {
-  let { name, password, profilepicture } = req.body;
+  let { name, password, pic} = req.body;
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
@@ -89,15 +89,15 @@ const registerUser3 = asyncHandler(async (req, res) => {
   if (!name || !password) {
     res.status(400).json({ message: "Empty Input Fields" });
     return;
-  } else if (!/^[a-zA-Z]*$/.test(name)) {
+  } else if (!/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)?$/) {
     res
       .status(400)
-      .json({ message: "Please enter a valid name with alphabets only" });
+      .json({ message: "Please enter a valid name" });
     return;
-  } else if (password.length < 8) {
+  } else if (password.length < 4) {
     res.status(400).json({
       message:
-        "Password is too short. Enter a password longer than 8 characters",
+        "Password is too short. Enter a password longer than 4 characters",
     });
     return;
   }
@@ -107,14 +107,14 @@ const registerUser3 = asyncHandler(async (req, res) => {
       name,
       email,
       password,
-      profilepicture,
+      pic,
     });
     if (user) {
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilepicture: user.profilepicture,
+        pic: user.pic,
         token: generateToken({ id: user._id }),
       });
     } else {
@@ -138,7 +138,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      profilepicture: user.profilepicture,
+      pic: user.pic,
       token: generateToken({ id: user._id }),
     });
   } else {

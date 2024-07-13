@@ -12,7 +12,6 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 
 dotenv.config();
 connectdb();
-
 const app = express();
 
 app.use(cors()); //cors middleware
@@ -25,7 +24,8 @@ app.use("/api/message", messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT ;
+
 const server = app.listen(
   PORT,
   console.log(`Server running on port ${PORT}`.blue.bold)
@@ -40,19 +40,22 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
-  socket.on('setup',(userData)=>{
+  socket.on("setup",(userData)=>{
     socket.join(userData._id);
-    socket.emit("Connected");
+    socket.emit("connected");
   }); 
-  socket.on('join chat',(room)=>{
+  socket.on("join chat",(room)=>{
     socket.join(room);
     console.log("User Joined room: "+ room);
   });
-  socket.on("typing",(room)=>socket.in(room).emit("typing"));
+  socket.on("typing",(room)=> {
+    socket.in(room).emit("typing")
+    console.log("typing");
+  });
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
   socket.on("new message",(newMessageRecieved)=>{
     var chat= newMessageRecieved.chat;
-     if (!chat.users) return console.log("chat.usersnot defined"); 
+     if (!chat.users) return console.log("chat.usersnot defined");
      chat.users.forEach(user=>{
       if (user._id== newMessageRecieved.sender_id) return;
       socket.in(user._id).emit("message recieved",newMessageRecieved);
