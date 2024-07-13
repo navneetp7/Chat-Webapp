@@ -13,13 +13,9 @@ const Chatpage = () => {
     <Flex direction="column" w="100%" h="100vh">
       {user && <SideDrawer />}
       <Flex
-        flex="0.97"
-        justifyContent="space-between"
-        p="10px"
-        bg="rgba(255, 255, 255, 0.8)"
-        boxShadow="lg"
+        flex="1"
+        justifyContent="space-around"
         borderRadius="lg"
-        m="10px"
       >
         {user && <MyChats fetchAgain={fetchAgain} />}
         {user && (

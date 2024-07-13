@@ -93,64 +93,61 @@ function SideDrawer() {
     }
   };
 
-  const accessChat = async (userId) => {
-    console.log(userId);
+const accessChat = async (userId) => {
+  console.log(userId);
 
-    try {
-      setLoadingChat(true);
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(`/api/chat`, { userId }, config);
+  try {
+    setLoadingChat(true);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.post(`/api/chat`, { userId }, config);
 
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data);
-      setLoadingChat(false);
-      onClose();
-    } catch (error) {
-      toast({
-        title: "Error fetching the chat",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
-    }
-  };
+    if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+    setSelectedChat(data);
+    setLoadingChat(false);
+    onClose();
+  } catch (error) {
+    toast({
+      title: "Error fetching the chat",
+      description: error.message,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom-left",
+    });
+  }
+};
 
   return (
     <>
       <Box
-        d="flex"
+        display="flex"
         justifyContent="space-between"
         alignItems="center"
         bg="white"
         w="100%"
-        p="5px 10px 5px 10px"
-        borderWidth="5px"
+        p="5px 5px"
+        borderBottom="1px solid #e2e8e0"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4}>
+            <Text display={{ base: "none", md: "flex" }} px={4}>
               Search User
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans">
+        <Text fontSize="2xl" fontFamily="Work sans" flex="1" textAlign="center">
           ConnectChat
         </Text>
-        <div>
+        <Box display="flex" alignItems="center">
           <Menu>
-            <MenuButton p={1}>
-              
-              
-
-              <BellIcon fontSize="2xl" m={1} />
+            <MenuButton>
+              <BellIcon fontSize="3xl" m={1} />
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
@@ -172,7 +169,7 @@ function SideDrawer() {
           <Menu>
             <MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
               <Avatar
-                size="sm"
+                size="md"
                 cursor="pointer"
                 name={user.name}
                 src={user.pic}
@@ -180,13 +177,12 @@ function SideDrawer() {
             </MenuButton>
             <MenuList>
               <ProfileModal user={user}>
-                <MenuItem>My Profile</MenuItem>{" "}
+                <MenuItem>Profile</MenuItem>
               </ProfileModal>
-              <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>
           </Menu>
-        </div>
+        </Box>
       </Box>
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
@@ -194,7 +190,7 @@ function SideDrawer() {
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
           <DrawerBody>
-            <Box d="flex" pb={2}>
+            <Box display="flex" pb={2}>
               <Input
                 placeholder="Search by name or email"
                 mr={2}
@@ -214,7 +210,7 @@ function SideDrawer() {
                 />
               ))
             )}
-            {loadingChat && <Spinner ml="auto" d="flex" />}
+            {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

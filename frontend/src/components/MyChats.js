@@ -49,30 +49,29 @@ const MyChats = ({ fetchAgain }) => {
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDirection="column"
-      alignItems="center"
+      alignItems="stretch"
       padding={3}
       background="white"
       width={{ base: "100%", md: "31%" }}
-      borderRadius="lg"
-      borderWidth="1px"
-      boxShadow="lg"
     >
       <Box
-        paddingBottom={3}
+        paddingBottom={1}
         paddingX={3}
-        fontSize={{ base: "24px", md: "28px" }}
+        fontSize={{ base: "24px", md: "24px" }}
         fontFamily="Work Sans, sans-serif"
         display="flex"
         width="100%"
         justifyContent="space-between"
         alignItems="center"
+        fontWeight="semibold"
         borderBottom="1px solid #e2e8f0"
       >
-        My Chats
+        Chats
         <GroupChatModal>
           <Button
             fontSize={{ base: "14px", md: "16px" }}
             rightIcon={<AddIcon />}
+            borderRadius="20"
             colorScheme="teal"
           >
             New Group Chat
@@ -82,11 +81,11 @@ const MyChats = ({ fetchAgain }) => {
       <Box
         display="flex"
         flexDirection="column"
-        padding={3}
-        background="#F8F8F8"
+        // padding={1}
+        background="white"
         width="100%"
         height="100%"
-        borderRadius="lg"
+        borderRadius=""
         overflowY="auto"
       >
         {chats ? (
@@ -96,12 +95,12 @@ const MyChats = ({ fetchAgain }) => {
                 key={chat._id}
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                background={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "black"}
-                padding={3}
+                background={selectedChat === chat ? "#E8E8E8" : "white"}
+                color="black"
+                padding={2}
                 borderRadius="lg"
                 transition="background 0.3s, color 0.3s"
-                _hover={{ background: "#cbd5e0" }}
+                _hover={{ background: "#E8E8E8" }}
               >
                 <Text fontWeight="semibold" fontSize="md">
                   {!chat.isGroupChat

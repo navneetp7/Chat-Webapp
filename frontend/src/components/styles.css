@@ -1,21 +1,58 @@
+/* styles.css */
 .messages {
   display: flex;
-  flex-direction: column;
-  overflow-y: auto; /*scroll*/
-  padding-right: 10px;
-  scrollbar-width: thin; /*none*/
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  height: 100%;
+  padding: 1rem;
 }
 
 .messages::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: darkgrey;
   border-radius: 10px;
 }
 
 .messages::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: white;
 }
 
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.message-input-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  background: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.message-input {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.scrollable-container {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.side-drawer-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.chatbox-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+}

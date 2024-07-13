@@ -1,23 +1,27 @@
-import { FormControl } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
-import { Box, Text, useToast, IconButton, Spinner } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import {
+  FormControl,
+  Input,
+  Box,
+  Text,
+  useToast,
+  IconButton,
+  Spinner,
+} from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
-
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
 import { getSender, getSenderFull } from "../config/ChatLogics";
-
 import animationData from "../animations/typing.json";
 import "./styles.css";
 
 const ENDPOINT = "http://localhost:8000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
-var socket, selectedChatCompare;
+let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -26,6 +30,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [page, setPage] = useState(1);
   const toast = useToast();
 
   const defaultOptions = {
@@ -40,7 +45,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
-  const fetchMessages = async () => {
+  const fetchMessages = async (pageNum = 1) => {
     if (!selectedChat) return;
 
     try {
@@ -53,10 +58,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       setLoading(true);
 
       const { data } = await axios.get(
-        `/api/message/${selectedChat._id}`,
+        `/api/message/${selectedChat._id}?page=${pageNum}`,
         config
       );
-      setMessages(data);
+      setMessages((prevMessages) => [...data, ...prevMessages]);
       setLoading(false);
 
       socket.emit("join chat", selectedChat._id);
@@ -142,15 +147,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       socket.emit("typing", selectedChat._id);
     }
     let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
+    const timerLength = 3000;
     setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
+      const timeNow = new Date().getTime();
+      const timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
         socket.emit("stop typing", selectedChat._id);
         setTyping(false);
       }
     }, timerLength);
+  };
+
+  const handleScroll = (e) => {
+    if (e.target.scrollTop === 0 && !loading) {
+      setPage((prevPage) => prevPage + 1);
+      fetchMessages(page + 1);
+    }
   };
 
   return (
@@ -164,13 +176,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       h="100%"
       borderRadius="lg"
       boxShadow="lg"
+      overflow="hidden"
     >
       {selectedChat ? (
         <>
           <Text
             fontSize={{ base: "28px", md: "30px" }}
-            pb={3}
-            px={2}
+            pb={1}
             w="100%"
             fontFamily="Work sans"
             d="flex"
@@ -181,6 +193,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               d={{ base: "flex", md: "none" }}
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
+              bg="white"
+              borderRadius="3xl"
               aria-label="Back"
             />
             {messages &&
@@ -203,6 +217,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ))}
           </Text>
           <Box
+            className="chat-container"
             d="flex"
             flexDir="column"
             justifyContent="flex-end"
@@ -212,7 +227,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="93%"
             borderRadius="lg"
             boxShadow="md"
-            overflowY="hidden"
+            onScroll={handleScroll}
           >
             {loading ? (
               <Spinner
@@ -232,6 +247,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               id="first-name"
               isRequired
               mt={3}
+              className="message-input-container"
             >
               {isTyping ? (
                 <Lottie
@@ -249,13 +265,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 onChange={typingHandler}
                 borderRadius="full"
                 boxShadow="sm"
+                className="message-input"
               />
             </FormControl>
           </Box>
         </>
       ) : (
-        // To get socket.io on same page
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%" >
+        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
           </Text>

@@ -29,7 +29,7 @@ function Homepage() {
 
 
   return (
-    <Container maxW="8xl" centerContent mt={20}>
+    <Container maxW="8xl" centerContent mt={20} >
       <Flex justifyContent="space-between" alignItems="flex-start" w="100%">
         <Box
           flex="0.9"
