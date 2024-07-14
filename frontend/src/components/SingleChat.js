@@ -1,6 +1,6 @@
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
+import { Flex, Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
@@ -178,7 +178,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       flexDir="column"
       justifyContent="flex-end"
       p={3}
-      bg="white"
       w="100%"
       h="100%"
       borderRadius="lg"
@@ -187,14 +186,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     >
       {selectedChat ? (
         <>
-          <Text
-            fontSize={{ base: "28px", md: "30px" }}
+          <Flex
+            fontSize={{ base: "10px", md: "22px" }}
             pb={1}
             w="100%"
             fontFamily="Work Sans"
-            d="flex"
-            justifyContent={{ base: "space-between" }}
             alignItems="center"
+            justify="space-between"
           >
             <IconButton
               d={{ base: "flex", md: "none" }}
@@ -204,37 +202,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               borderRadius="3xl"
               aria-label="Back"
             />
-            {messages &&
-              (!selectedChat.isGroupChat ? (
-                <>
+            {messages && !selectedChat.isGroupChat ? (
+              <>
+                <Box flex="1" textAlign="center">
                   {getSender(user, selectedChat.users)}
+                </Box>
+                <Box position="absolute" right="1rem">
                   <ProfileModal
                     user={getSenderFull(user, selectedChat.users)}
                   />
-                </>
-              ) : (
-                <>
+                </Box>
+              </>
+            ) : (
+              <>
+                <Box flex="1" textAlign="center">
                   {selectedChat.chatName.toUpperCase()}
-                  <UpdateGroupChatModal
-                    fetchMessages={fetchMessages}
-                    fetchAgain={fetchAgain}
-                    setFetchAgain={setFetchAgain}
-                  />
-                </>
-              ))}
-          </Text>
+                </Box>
+                <UpdateGroupChatModal
+                  fetchMessages={fetchMessages}
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                />
+              </>
+            )}
+          </Flex>
           <Box
             className="chat-container"
             d="flex"
             flexDir="column"
             justifyContent="flex-end"
-            p={3}
-            bg="#F0F0F0"
             w="100%"
-            h="93%"
-            borderRadius="lg"
-            boxShadow="md"
+            h="97%"
+            borderRadius=""
             onScroll={handleScroll}
+            backgroundImage="url('Chatbg.jpeg')"
           >
             {loading ? (
               <Spinner
@@ -266,12 +267,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : null}
               <Input
                 variant="filled"
-                // bg="#E0E0E0"
                 placeholder="Enter a message..."
+                bg="white"
                 value={newMessage}
                 onChange={typingHandler}
                 borderRadius="full"
-                boxShadow="sm"
+                
                 className="message-input"
               />
             </FormControl>

@@ -89,7 +89,7 @@ const MyChats = ({ fetchAgain }) => {
         overflowY="auto"
       >
         {chats ? (
-          <Stack spacing={3}>
+          <Stack spacing={0.5}>
             {chats.map((chat) => (
               <Box
                 key={chat._id}

@@ -128,7 +128,7 @@ const accessChat = async (userId) => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="white"
+        bg="#F4F5FA"
         w="100%"
         p="5px 5px"
         borderBottom="1px solid #e2e8e0"
@@ -167,7 +167,11 @@ const accessChat = async (userId) => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              bg="#F4F5FA"
+              rightIcon={<ChevronDownIcon />}
+            >
               <Avatar
                 size="md"
                 cursor="pointer"
