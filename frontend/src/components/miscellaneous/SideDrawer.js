@@ -128,7 +128,7 @@ const accessChat = async (userId) => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="#F4F5FA"
+        bg="teal.200"
         w="100%"
         p="5px 5px"
         borderBottom="1px solid #e2e8e0"
@@ -141,7 +141,7 @@ const accessChat = async (userId) => {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans" flex="1" textAlign="center">
+        <Text fontSize="2xl" fontFamily="Work sans.bold" flex="1" textAlign="center" >
           ConnectChat
         </Text>
         <Box display="flex" alignItems="center">
@@ -169,7 +169,7 @@ const accessChat = async (userId) => {
           <Menu>
             <MenuButton
               as={Button}
-              bg="#F4F5FA"
+              bg="teal.200"
               rightIcon={<ChevronDownIcon />}
             >
               <Avatar

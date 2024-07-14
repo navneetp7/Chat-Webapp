@@ -21,7 +21,7 @@ import UserListItem from "../userAvatar/UserListItem";
 
 const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [groupChatName, setGroupChatName] = useState("");
+  const [groupChatName, setGroupChatName] = useState();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -64,7 +64,7 @@ const GroupChatModal = ({ children }) => {
       setSearchResult(data);
     } catch (error) {
       toast({
-        title: "Error Occurred!",
+        title: "Error Occured!",
         description: "Failed to Load the Search Results",
         status: "error",
         duration: 5000,
@@ -81,7 +81,7 @@ const GroupChatModal = ({ children }) => {
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
       toast({
-        title: "Please fill all the fields",
+        title: "Please fill all the feilds",
         status: "warning",
         duration: 5000,
         isClosable: true,

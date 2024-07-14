@@ -209,49 +209,69 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="#f5f5f5">
           <ModalHeader
             fontSize="35px"
+            paddingBottom="0"
             fontFamily="Work sans"
+            bg="#F9F6EE"
             d="flex"
             justifyContent="center"
+            borderBottom="1px solid #e2e8e0"
           >
             {selectedChat.chatName}
           </ModalHeader>
 
           <ModalCloseButton />
           <ModalBody d="flex" flexDir="column" alignItems="center">
-            <Box w="100%" d="flex" flexWrap="wrap" pb={3}>
-              {selectedChat.users.map((u) => (
-                <UserBadgeItem
-                  key={u._id}
-                  user={u}
-                  admin={selectedChat.groupAdmin}
-                  handleFunction={() => handleRemove(u)}
-                />
-              ))}
-            </Box>
-            <FormControl d="flex">
+              <Box
+                bg="#f5f5f5"
+                borderRadius="md"
+                p={3}
+                boxShadow="md"
+                maxH="300px"
+                overflowY="auto"
+              >
+                Participants:
+                {selectedChat.users.map((u) => (
+                  <Box
+                    key={u._id}
+                    d="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    bg="#f5f5f5"
+                    borderRadius="md"
+                  >
+                    <UserBadgeItem
+                      user={u}
+                      admin={selectedChat.groupAdmin}
+                      handleFunction={() => handleRemove(u)}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            <FormControl d="flex" w="100%" alignItems="center" mt={3}>
               <Input
                 placeholder="Chat Name"
                 mb={3}
                 value={groupChatName}
                 onChange={(e) => setGroupChatName(e.target.value)}
               />
-              <Button
-                variant="solid"
-                colorScheme="teal"
-                ml={1}
-                isLoading={renameloading}
-                onClick={handleRename}
-              >
-                Update
-              </Button>
+              <ModalFooter>
+                <Button
+                  variant="solid"
+                  colorScheme="teal"
+                  ml={1}
+                  isLoading={renameloading}
+                  onClick={handleRename}
+                >
+                  Update
+                </Button>
+              </ModalFooter>
             </FormControl>
-            <FormControl>
+            <FormControl w="100%" mt={3}>
               <Input
                 placeholder="Add User to group"
-                mb={1}
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
