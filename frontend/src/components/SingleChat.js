@@ -180,6 +180,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       p={3}
       w="100%"
       h="100%"
+      maxH="94.5vh"
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
