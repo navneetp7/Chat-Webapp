@@ -85,6 +85,7 @@ const MyChats = ({ fetchAgain }) => {
         background="white"
         width="100%"
         height="100%"
+        maxH="87.7vh"
         borderRadius=""
         overflowY="auto"
       >
