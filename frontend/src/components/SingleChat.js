@@ -15,7 +15,7 @@ import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
 
-const ENDPOINT = "http://localhost:5000"; // Replace with your socket server endpoint
+const ENDPOINT = "http://localhost:8000"; // Replace with your socket server endpoint
 
 let socket, selectedChatCompare;
 
@@ -261,7 +261,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {istyping ? (
                 <Lottie
                   options={defaultOptions}
-                  height={50}
+                  height={35}
                   width={70}
                   style={{ marginBottom: 15, marginLeft: 0 }}
                 />
