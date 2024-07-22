@@ -39,7 +39,17 @@ export const isSameUser = (messages, m, i) => {
 };
 
 export const getSender = (loggedUser, users) => {
-  return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
+  if (!users || users.length < 2) {
+    console.error("Invalid users array:", users);
+    return "Unknown Sender";
+  }
+
+  if (!loggedUser) {
+    console.error("Invalid loggedUser object:", loggedUser);
+    return "Unknown Sender";
+  }
+
+  return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
 };
 
 export const getSenderFull = (loggedUser, users) => {
