@@ -56,7 +56,7 @@ const Signup = ({ token }) => {
       const payload = {
         name,
         password,
-        profilepicture: pic,
+        pic,
       };
 
       console.log("Sending registration request:", payload);
@@ -109,9 +109,9 @@ const Signup = ({ token }) => {
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "mean-chatapp");
-      data.append("cloud_name", "navneetp");
-      fetch("https://api.cloudinary.com/v1_1/navneetp/image/upload", {
+      data.append("upload_preset", "chat-app");
+      data.append("cloud_name", "dm1mcccyi");
+      fetch("https://api.cloudinary.com/v1_1/dm1mcccyi/image/upload", {
         method: "post",
         body: data,
       })
@@ -153,7 +153,7 @@ const Signup = ({ token }) => {
           <Box textAlign="center" mb={4}>
             <Avatar
               size="xl"
-              name="Pictu"
+              name="Profile Picture"
               src={pic}
               cursor="pointer"
               onClick={() => inputFileRef.current.click()}

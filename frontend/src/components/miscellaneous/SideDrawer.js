@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
+import { Badge, IconButton } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -93,34 +94,34 @@ function SideDrawer() {
     }
   };
 
-const accessChat = async (userId) => {
-  console.log(userId);
+  const accessChat = async (userId) => {
+    console.log(userId);
 
-  try {
-    setLoadingChat(true);
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const { data } = await axios.post(`/api/chat`, { userId }, config);
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(`/api/chat`, { userId }, config);
 
-    if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-    setSelectedChat(data);
-    setLoadingChat(false);
-    onClose();
-  } catch (error) {
-    toast({
-      title: "Error fetching the chat",
-      description: error.message,
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-      position: "bottom-left",
-    });
-  }
-};
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
 
   return (
     <>
@@ -141,13 +142,35 @@ const accessChat = async (userId) => {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans.bold" flex="1" textAlign="center" >
+        <Text
+          fontSize="2xl"
+          fontFamily="Work sans.bold"
+          flex="1"
+          textAlign="center"
+        >
           ConnectChat
         </Text>
         <Box display="flex" alignItems="center">
           <Menu>
             <MenuButton>
-              <BellIcon fontSize="3xl" m={1} />
+              <Box position="relative" display="inline-block">
+                <IconButton icon={<BellIcon />} />
+                {notification.length > 0 && (
+                  <Badge
+                    position="absolute"
+                    top="-1"
+                    right="-1"
+                    bg="red.500"
+                    borderRadius="full"
+                    px={2}
+                    py={1}
+                    fontSize="0.8em"
+                    color="white"
+                  >
+                    {notification.length}
+                  </Badge>
+                )}
+              </Box>
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
