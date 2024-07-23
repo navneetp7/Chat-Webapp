@@ -79,11 +79,11 @@ io.on("connection", (socket) => {
      chat.users.forEach(user=>{
       if (user._id== newMessageRecieved.sender_id) return;
       console.log("new message");
-      socket.in(user._id).emit("message recieved",newMessageRecieved);
+      socket.in(user._id).emit("message received",newMessageRecieved);
      }) 
   })
   socket.off("setup",()=>{
     console.log("USER DISCONNECTED");
     socket.leave(userData._id);
   })
-}); 
+});
